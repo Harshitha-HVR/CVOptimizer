@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Optimizer Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* Black background behind the form */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #e1e1e1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3d4b5c; /* Dark grey-blue */
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #6c757d; /* Medium grey */
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            border: 1px solid #d1d8e0; /* Soft border color */
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fafafa; /* Light background for inputs */
+            color: #3d4b5c; /* Dark text */
+            transition: all 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #66c0f4; /* Soft blue on focus */
+            background-color: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #66c0f4; /* Soft blue */
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #5aa8d4; /* Darker blue on hover */
+        }
+
+        .error {
+            color: #e74c3c; /* Red color for errors */
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Add subtle animation */
+        .container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Login Page -->
+    <div id="login-page" class="container">
+        <h1>Admin Login</h1>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required placeholder="Enter username">
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter password">
+
+            <button type="button" onclick="login()">Login</button>
+            <div id="error-message" class="error"></div>
+        </form>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (username === 'admin' && password === 'password') {
+                window.location.href = 'dashboard.html';
+            } else {
+                errorMessage.textContent = 'Invalid credentials. Please try again.';
+            }
+        }
+    </script>
+
+</body>
+</html>

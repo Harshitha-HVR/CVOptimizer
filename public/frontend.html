@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Optimizer - User Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome Link -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header styling */
+        header {
+            background-color: #808080;
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+        }
+
+        /* Navigation Bar styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Main Container Styling */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: calc(100vh - 80px); /* Adjust height to fit in the viewport */
+            overflow: hidden;
+        }
+
+        #image-section {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #filling-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Text Styling */
+        #welcome-message {
+            position: absolute;
+            color: white;
+            font-size: 2rem;
+            animation: moveText 10s linear infinite;
+            z-index: 1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: none;
+        }
+
+        /* Text animation */
+        @keyframes moveText {
+            0% {
+                transform: translate(-50%, -50%);
+            }
+            25% {
+                transform: translate(-40%, -50%);
+            }
+            50% {
+                transform: translate(-30%, -50%);
+            }
+            75% {
+                transform: translate(-20%, -50%);
+            }
+            100% {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* Contact Details Styling */
+        #contact-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #contact-details a {
+            text-decoration: none;
+            color: black;
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        #contact-details a:hover {
+            color: #808080;
+        }
+
+        #contact-details i {
+            margin-right: 10px;
+        }
+
+        /* Sections */
+        section {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            width: 60%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: red;
+            display: none;
+        }
+
+        /* Hide sections by default */
+        #image-section, #cv-upload, #personality-form, #contact-us {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>CV Optimizer - Dashboard</h1>
+    </header>
+
+    <!-- Navigation Bar (Top Bar with Options) -->
+    <nav>
+        <a href="javascript:void(0);" id="nav-login">Login</a>
+        <a href="javascript:void(0);" id="nav-details" style="display:none;">Details</a>
+        <a href="javascript:void(0);" id="nav-upload" style="display:none;">Upload CV</a>
+        <a href="javascript:void(0);" id="nav-personality" style="display:none;">Personality Form</a>
+        <a href="javascript:void(0);" id="nav-contact" style="display:none;">Contact Us</a>
+        <a href="javascript:void(0);" id="nav-logout" style="display:none;">Logout</a>
+    </nav>
+
+    <!-- Main Container (Initially hidden until login) -->    
+    <div class="container" id="container" style="display:none;">
+        <!-- Content Area (Where the message and forms are displayed) -->
+        <section id="welcome-message">
+            <h2>Welcome, Aspirant!</h2>
+            <p>We are excited to help you with your career journey.</p>
+        </section>
+
+        <!-- Image Section (Filling the remaining space) -->
+        <section id="image-section">
+            <img src="C:\Users\Harshita\OneDrive\Pictures\WhatsApp Image 2024-12-07 at 17.40.44_56d810ee.jpg" alt="Image" id="filling-image" style="width:100%; height:100%; object-fit: cover;">
+        </section>
+
+        <!-- CV Upload Section -->
+        <section id="cv-upload">
+            <h2>Upload Your CV</h2>
+            <form id="cv-upload-form">
+                <input type="file" id="cv-file" name="cv-file" required>
+                <button type="submit">Upload CV</button>
+            </form>
+            <p id="cv-success-message" style="color: green; display: none;">CV submitted successfully!</p>
+            <p id="personality-form-prompt" style="display: none;">Please fill the personality form.</p>
+        </section>
+
+        <!-- Personality Form Section -->
+        <section id="personality-form" style="display:none;">
+    <h2>Please Fill Out the Personality Form</h2>
+    <div id="personality-form-container" style="max-height: 500px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
+        <form id="personality-form-content" style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="form-field">
+                <label for="self-description">Tell us about yourself</label>
+                <textarea id="self-description" placeholder="Tell us about yourself" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="strengths-weaknesses">What are your strengths and weaknesses?</label>
+                <textarea id="strengths-weaknesses" placeholder="What are your strengths and weaknesses?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="motivation">What motivates you in life and work?</label>
+                <textarea id="motivation" placeholder="What motivates you in life and work?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="stress-management">How do you handle stressful situations or pressure in daily life?</label>
+                <textarea id="stress-management" placeholder="How do you handle stressful situations or pressure in daily life?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="greatest-achievement">What do you consider your greatest achievement so far?</label>
+                <textarea id="greatest-achievement" placeholder="What do you consider your greatest achievement so far?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="task-motivation">How do you stay motivated to complete tasks, even the ones you find less enjoyable?</label>
+                <textarea id="task-motivation" placeholder="How do you stay motivated to complete tasks, even the ones you find less enjoyable?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="teamwork">How do you ensure that everyone on the team feels heard and valued?</label>
+                <textarea id="teamwork" placeholder="How do you ensure that everyone on the team feels heard and valued?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="leadership">Have you ever taken the lead on a project? If so, how did you manage it?</label>
+                <textarea id="leadership" placeholder="Have you ever taken the lead on a project? If so, how did you manage it?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="conflict-resolution">What steps do you take to resolve misunderstandings in the workplace?</label>
+                <textarea id="conflict-resolution" placeholder="What steps do you take to resolve misunderstandings in the workplace?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="continuous-improvement">What steps do you take to continuously improve yourself professionally?</label>
+                <textarea id="continuous-improvement" placeholder="What steps do you take to continuously improve yourself professionally?" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="describe-yourself">Describe yourself in three words:</label>
+                <textarea id="describe-yourself" placeholder="Describe yourself in three words:" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="success-definition">How do you define success?</label>
+                <textarea id="success-definition" placeholder="How do you define success?" required></textarea>
+            </div>
+            <button type="submit" style="padding: 10px 20px; background-color: #808080; color: white; border: none; border-radius: 5px; cursor: pointer;">Submit</button>
+        </form>
+        <p id="thank-you-message" style="display:none; color: green; margin-top: 20px;">Thank you for your response!</p>
+    </div>
+</section>
+	<style>
+    /* Form field styling */
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-field label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-field textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        resize: vertical;
+        min-height: 100px;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-field textarea:focus {
+        border-color: #808080;
+        outline: none;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #808080;
+    }
+</style>
+
+        <!-- Contact Us Section -->
+        <section id="contact-us">
+            <h2>Contact Us</h2>
+            <div id="contact-details">
+                <a href="tel:+918660833299"><i class="fa fa-phone"></i>8660833299</a>
+                <a href="tel:+919741849105"><i class="fa fa-phone"></i>9741849105</a>
+                <a href="mailto:vindhyalaharshitha@gmail.com"><i class="fa fa-envelope"></i>vindhyalaharshitha@gmail.com</a>
+                <a href="mailto:jithunavya245@gmail.com"><i class="fa fa-envelope"></i>jithunavya245@gmail.com</a>
+	    </div>
+        </section>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login" style="display:block;">
+        <h2>Login</h2>
+        <form id="login-form">
+            <input type="text" id="login-username" placeholder="Username" required><br>
+            <input type="password" id="login-password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <p id="login-error" class="error">Invalid credentials. Please try again.</p>
+        <p>Don't have an account? <a href="javascript:void(0);" id="create-account-link">Create Account</a></p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CV Optimizer. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let loggedInUser = null;
+
+        // Load logged-in user from localStorage
+        window.onload = function() {
+            let storedUser = localStorage.getItem('loggedInUser');
+            if (!storedUser) {
+                document.getElementById('login').style.display = 'block'; // Show login form
+                document.getElementById('container').style.display = 'none'; // Hide dashboard
+                document.getElementById('nav-login').style.display = 'block'; // Show login link
+                document.getElementById('nav-details').style.display = 'none'; // Hide details link
+                document.getElementById('nav-upload').style.display = 'none'; // Hide upload CV link
+                document.getElementById('nav-personality').style.display = 'none'; // Hide personality form link
+                document.getElementById('nav-contact').style.display = 'none'; // Hide contact us link
+                document.getElementById('nav-logout').style.display = 'none'; // Hide logout link
+            }
+        };
+
+        // Handle Sign-Up
+        document.getElementById('create-account-link').addEventListener('click', function() {
+            let username = prompt("Enter your username:");
+            let password = prompt("Enter your password:");
+
+            // Store the new user in local storage (Simulating a database for persistence)
+            localStorage.setItem('users', JSON.stringify([{ username, password }]));
+            alert("Account created successfully!");
+        });
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let username = document.getElementById('login-username').value;
+            let password = document.getElementById('login-password').value;
+
+            // Check if the user exists in localStorage
+            let storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+            let user = storedUsers.find(user => user.username === username && user.password === password);
+
+            if (user) {
+                loggedInUser = user;
+                localStorage.setItem('loggedInUser', JSON.stringify(user)); // Save user to localStorage
+
+                document.getElementById('login').style.display = 'none'; // Hide login form
+                document.getElementById('container').style.display = 'flex'; // Show dashboard
+                document.getElementById('nav-login').style.display = 'none'; // Hide login link
+                document.getElementById('nav-details').style.display = 'block'; // Show details link
+                document.getElementById('nav-upload').style.display = 'block'; // Show upload CV link
+                document.getElementById('nav-personality').style.display = 'block'; // Show personality form link
+                document.getElementById('nav-contact').style.display = 'block'; // Show contact us link
+                document.getElementById('nav-logout').style.display = 'block'; // Show logout link
+
+                // Hide the error message
+                document.getElementById('login-error').style.display = 'none';
+
+                // Redirect to Details Section after login
+                document.getElementById('nav-details').click();
+            } else {
+                document.getElementById('login-error').style.display = 'block'; // Show error
+            }
+        });
+
+        // Function to hide all sections
+        function hideSections() {
+            document.getElementById('welcome-message').style.display = 'none';
+            document.getElementById('image-section').style.display = 'none';
+            document.getElementById('cv-upload').style.display = 'none';
+            document.getElementById('personality-form').style.display = 'none';
+            document.getElementById('contact-us').style.display = 'none';
+        }
+
+        // Show Details Section
+        document.getElementById('nav-details').addEventListener('click', function() {
+            hideSections();
+            document.getElementById('welcome-message').style.display = 'block'; // Show welcome message
+            document.getElementById('image-section').style.display = 'block'; // Show image
+        });
+
+        // Show Upload CV Section
+        document.getElementById('nav-upload').addEventListener('click', function() {
+            hideSections();
+            document.getElementById('cv-upload').style.display = 'block'; // Show CV upload
+        });
+
+        // Show Personality Form Section
+        document.getElementById('nav-personality').addEventListener('click', function() {
+            hideSections();
+            document.getElementById('personality-form').style.display = 'block'; // Show personality form
+        });
+
+        // Handle Personality Form Submission
+        document.getElementById('personality-form-content').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Show the thank you message after form submission
+            document.getElementById('thank-you-message').style.display = 'block';
+
+            // Hide the personality form after submission
+            document.getElementById('personality-form').style.display = 'none';
+
+            // Redirect to the details section
+            document.getElementById('nav-details').click();
+        });
+
+        // Show Contact Us Section
+        document.getElementById('nav-contact').addEventListener('click', function() {
+            hideSections();
+            document.getElementById('contact-us').style.display = 'block'; // Show contact us form
+        });
+
+        // Handle Logout
+        document.getElementById('nav-logout').addEventListener('click', function() {
+            loggedInUser = null;
+            localStorage.removeItem('loggedInUser'); // Remove logged-in user from localStorage
+
+            document.getElementById('login').style.display = 'block'; // Show login form
+            document.getElementById('container').style.display = 'none'; // Hide dashboard
+            document.getElementById('nav-login').style.display = 'block'; // Show login link
+            document.getElementById('nav-details').style.display = 'none'; // Hide details link
+            document.getElementById('nav-upload').style.display = 'none'; // Hide upload CV link
+            document.getElementById('nav-personality').style.display = 'none'; // Hide personality form link
+            document.getElementById('nav-contact').style.display = 'none'; // Hide contact us link
+            document.getElementById('nav-logout').style.display = 'none'; // Hide logout link
+        });
+
+        // Handle CV Upload
+        document.getElementById('cv-upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate CV upload (in real life, you would handle the file upload here)
+            
+            // Show success message and personality form prompt
+            document.getElementById('cv-success-message').style.display = 'block';
+            document.getElementById('personality-form-prompt').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
